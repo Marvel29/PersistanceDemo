@@ -32,12 +32,22 @@ public class MainActivity extends AppCompatActivity {
         this.btnPersist =(Button)findViewById(R.id.btnPersist);
         onload();
     }
-   // Retrieve the value  and put it in the edit text
+   //pertist data using  Shared Preferences
     private void onload() {
         String text = pref.getString("text","N/A");
         this.etValue.setText(text);
 
     }
+
+    public void onPersist1(View v){
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString("text",etValue.getText().toString());
+        edit.apply();
+        Toast.makeText(this,"text saved",Toast.LENGTH_LONG).show();
+    }
+
+    // persist data using File
+
     private void onload2() {
         BufferedReader input = null;
         String text= "N/A";
@@ -63,13 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // store the value from the editText to the disk using (strategie values)
-    public void onPersist1(View v){
-        SharedPreferences.Editor edit = pref.edit();
-        edit.putString("text",etValue.getText().toString());
-        edit.apply();
-        Toast.makeText(this,"text saved",Toast.LENGTH_LONG).show();
-    }
     public void onPersist2(View v) {
         FileOutputStream fos;
         try {
@@ -88,5 +91,20 @@ public class MainActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
 
+    }
+//persist data using sqllite
+    private void onLoad3(){
+        InputValue val = InputValue.theMostRecentValue();
+        etValue.setText(val.text);
+    }
+    public void onPersist3(View v) {
+        InputValue val = new InputValue(etValue.getText().toString());
+        val.save();
+    }
+
+    //
+
+    public void btnOnclick(View view) {
+        onPersist1(etValue);
     }
 }
